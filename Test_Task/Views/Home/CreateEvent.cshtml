@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "CreateEventView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Test_Task.Models.Event.Event
+
+
+
+<h2>Добавление нового мероприятия</h2>
+
+@if (TempData["Message"] != null)
+{
+    <h3>@TempData["Message"]</h3>
+}
+<button id="add_field" class="btn btn-default">Добавить поле</button>
+<button id="remove_last_field" class="btn btn-default">Удалить поле</button>
+@using (Html.BeginForm("CreateEvent", "Home", FormMethod.Post))
+{
+    <input type="hidden" value="@ViewBag.UserId" name="AuthorId" />
+    <table class="table">
+        <tbody id="params">
+            <tr>
+                <td>@Html.LabelFor(model => model.Name)</td>
+                <td>@Html.EditorFor(model => model.Name)</td>
+                <td>@Html.ValidationMessageFor(model => model.Name)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.UserAmount)</td>
+                <td>
+                    <input type="number" title="Оставьте поле без изменений, если число участников неограничено" value="0" name="UserAmount" min="0" />
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.UserAmount)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.Date)</td>
+                <td><input type="datetime" name="Date" /></td>
+                <td>@Html.ValidationMessageFor(model => model.Date)</td>
+            </tr>
+            <tr><td>Добавьте дополнительные поля</td></tr>
+            <tr>
+                <th>Название</th>
+                <th>Значение</th>
+            </tr>
+            <tr class="additional">
+                @Html.EditorFor(model => model.AdditionalInfo)
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-success">Создать мероприятие</button>
+    <!--<input type="submit" value="Создать мероприятие" />-->
+}
+<!--
+    <td>
+                    <input type="text" name="AdditionalInfo[0].title" value="Тема" required />
+                </td>
+                <td>
+                    <input type="text" name="AdditionalInfo[0].value" required />
+                </td>
+-->
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/create_event.js")
+}

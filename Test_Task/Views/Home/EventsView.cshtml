@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "EventsView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Актуальные мероприятия</h2>
+
+@if(TempData["ResultMessage"] != null)
+{
+    <h3>@TempData["ResultMessage"]</h3>
+}
+
+<div class="container">
+    <div class="row">
+        @foreach (var userEvent in ViewBag.Events)
+        {
+        <div class="col">
+            <p>Название: @userEvent.Name</p>
+            <p>Дата проведения: @userEvent.Date</p>
+            <p>Максимальное число участников: @(userEvent.UserAmount == 0 ? "Неограничено" : userEvent.UserAmount)</p>
+            <p>Текущее число участников: @userEvent.SignedUsers.Count </p>
+            @if (ViewBag.Fields != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Поле</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var field in ViewBag.Fields)
+                        {
+                            if (field.EventId == userEvent.EventId)
+                            {
+                                <tr>
+                                    <td>@field.Title</td>
+                                    <td>@field.Value</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (userEvent.UserAmount == 0 || userEvent.UserAmount > userEvent.SignedUsers.Count)
+            {
+                <a class="btn btn-default" href="/Home/Subscribe?eventId=@userEvent.EventId">Зарегистрироваться на мероприятие</a>
+            }
+            else
+            {
+                <button class="btn btn-secondary" disabled>Регистрация завершена</button>
+            }
+        </div>
+        }
+    </div>
+</div>
